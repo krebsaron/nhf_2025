@@ -1,0 +1,14 @@
+# Environment variables
+.env
+
+# Docker
+*.log
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db

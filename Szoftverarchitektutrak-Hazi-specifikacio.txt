@@ -1,0 +1,238 @@
+Budapesti Műszaki és Gazdaságtudományi Egyetem
+Villamosmérnöki és Informatikai Kar
+
+Csomor Tamás, Horváth Ádám Márton,
+Krebs Áron Antal, Mack Márton
+
+SZOFTVERARCHITEKTÚRÁK
+HÁZI FELADAT SPECIFIKÁCIÓ
+
+BUDAPEST, 2025
+
+Tartalomjegyzék
+1 Bevezetés ....................................................................................................................... 3
+2 Specifikáció ................................................................................................................... 4
+2.1 Szereplők ................................................................................................................ 4
+2.2 Használati példák (Use Case -ek) ........................................................................... 4
+2.2.1 Random chat indítása ....................................................................................... 4
+2.2.2 AI chat várakozás közben ................................................................................ 5
+2.2.3 AI-asszisztált üzenetírás .................................................................................. 5
+2.2.4 Beszélgetés két felhasználó között .................................................................. 5
+2.2.5 Chat befejezése ................................................................................................ 6
+2.3 Funkcionális követelmények .................................................................................. 6
+2.3.1 Random chat indítása ....................................................................................... 6
+2.3.2 AI chat várakozás közben ................................................................................ 6
+2.3.3 AI-asszisztált üzenetírás .................................................................................. 6
+2.3.4 Beszélgetés két felhasználó között .................................................................. 7
+2.3.5 Chat befejezése ................................................................................................ 7
+2.4 Nem funkcionális követelmények .......................................................................... 7
+2.4.1 Biztonság és adatvédelem ................................................................................ 7
+2.4.2 Felhasználói élmény ........................................................................................ 7
+2.5 Technológiai stack és architektúra .......................................................................... 8
+Frontend .................................................................................................................... 8
+Backend .................................................................................................................... 8
+Adatbázis: ................................................................................................................. 8
+AI integráció ............................................................................................................. 8
+
+2
+
+1 Bevezetés
+A projekt célja egy modern, interaktív random chat alkalmazás fejlesztése, amely
+valós idejű kapcsolódást biztosít két felhasználó között. Az alkalmazás célja, hogy
+könnyen, gyorsan és anonim módon lehessen beszélgetőpartnert találni.
+A felhasználói élményt tovább növeli a beépített mesterséges intelligencia (AI)
+funkció. Amíg a felhasználó vár a párosításra, lehetősége van egy AI chatbottal
+beszélgetni, így a várakozási idő is aktív és élvezetes marad. Emellett az AI a
+beszélgetések során is segítséget nyújt: képes javaslatokat adni, javítani vagy akár
+megírni üzeneteket a felhasználó helyett egy adott prompt alapján.
+A specifikáció részletesen bemutatja az alkalmazás használati példáit,
+funkcionális és nem funkcionális követelményeit, illetve a felhasználni tervezett
+technológiákat.
+
+3
+
+2 Specifikáció
+2.1 Szereplők
+•
+
+Beszélgetni kívánó felhasználó
+o Vagy a mesterséges intelligenciával vagy egy másik felhasználóval
+beszélget
+
+•
+
+Mesterséges intelligencia
+o Várakozás ideje alatt chatpartner
+o Beszélgetés során asszisztensként szolgál
+
+2.2 Használati példák (Use Case -ek)
+2.2.1 Random chat indítása
+Cél: A felhasználó új beszélgetést indít egy véletlenszerűen kiválasztott másik
+felhasználóval.
+Szereplő: Felhasználó
+Folyamat:
+1. A felhasználó a "Chat indítása" gombra kattint.
+2. A rendszer keres egy másik elérhető felhasználót.
+3. Amíg nincs találat a felhasználó a lobbyban várakozik
+4. Ha találat van, létrejön a kapcsolat, és megnyílik a chat képernyő.
+
+4
+
+2.2.2 AI chat várakozás közben
+Cél: A felhasználó beszélgethet az AI bottal, amíg a rendszer beszélgetőpartnert keres
+számára.
+Szereplők: Felhasználó, AI bot
+Folyamat:
+1. A felhasználó elindítja a keresést.
+2. Mivel még nincs partner, az AI chat lehetőség felajánlásra kerül.
+3. A felhasználó üzeneteket ír az AI-nak, az AI válaszol.
+4. Amikor valódi felhasználó elérhető, a rendszer átvált az élő beszélgetésre.
+2.2.3 AI-asszisztált üzenetírás
+Cél: A felhasználó mesterséges intelligencia segítségével megfogalmaz egy hatékonyabb
+vagy pontosabb üzenetet.
+Szereplők: Felhasználó, AI-asszisztens
+Folyamat:
+1. A felhasználó kijelöli az üzenetírás mezőt.
+2. Kérheti, hogy az AI javasoljon üzenetet, vagy formálja át a meglévőt.
+3. Az AI elkészíti a javaslatot.
+4. A felhasználó jóváhagyja vagy módosítja, majd elküldi az üzenetet.
+2.2.4 Beszélgetés két felhasználó között
+Cél: Két felhasználó beszélgetést folytat egy számukra létrehozott chatszobában.
+Szereplők: Felhasználók
+Folyamat:
+1. Megnyílik a chat felület mindkét felhasználó számára.
+2. A felhasználók üzeneteket küldenek és fogadnak valós időben.
+3. A beszélgetés befejeztével mindkét fél lezárhatja a chatet, vagy újabb partnert
+kérhet.
+
+5
+
+2.2.5 Chat befejezése
+Cél: A felhasználó befejezi a chatet.
+Szereplő: Felhasználó
+Folyamat:
+1. A beszélgetés véget ér.
+2. A felhasználó dönthet, hogy új chatet indít vagy kilép.
+
+2.3 Funkcionális követelmények
+2.3.1 Random chat indítása
+•
+
+A rendszer biztosítson egy "Chat indítása" gombot, amelyre való kattintás után a
+rendszer keres egy másik elérhető felhasználót.
+
+•
+
+A rendszer keressen és válasszon ki egy másik elérhető felhasználót az új
+beszélgetéshez.
+
+•
+
+Amíg nincs találat, a felhasználó várakozzon a lobbyban.
+
+•
+
+Találat esetén automatikusan nyissa meg és hozza létre a beszélgetési felületet
+mindkét felhasználó számára.
+
+2.3.2 AI chat várakozás közben
+•
+
+Az alkalmazás kínáljon AI chatbot elérhetőséget, amelyhez a felhasználó
+hozzáférhet a beszélgetőpartner keresése alatt.
+
+•
+
+Az AI chatbot képes legyen üzenetek fogadására és válaszadásra valós időben.
+
+•
+
+Amint élő felhasználó elérhető, az AI-beszélgetés automatikusan váltson át az
+élő chatre.
+
+2.3.3 AI-asszisztált üzenetírás
+•
+
+Az üzenetírás mező támogassa az AI-alapú javaslatkérést vagy meglévő üzenet
+átfogalmazását.
+
+•
+
+Az AI generáljon javaslatokat az üzenet tartalmára a megadott prompt vagy
+részleges szöveg alapján.
+
+6
+
+•
+
+A felhasználó válassza ki, módosítsa vagy utasítsa el az AI által ajánlott
+szöveget, mielőtt elküldené.
+
+2.3.4 Beszélgetés két felhasználó között
+•
+
+A rendszer biztosítson valós idejű, kétirányú üzenetküldést és fogadást a
+chatszobában.
+
+•
+
+A beszélgetés során kérhető legyen további partner keresése vagy a chat
+lezárása.
+
+2.3.5 Chat befejezése
+•
+
+A felhasználó bármikor lezárhatja a beszélgetést.
+
+•
+
+A rendszer kínáljon lehetőséget új véletlenszerű chat indítására vagy a kilépésre
+az alkalmazásból.
+
+2.4 Nem funkcionális követelmények
+2.4.1 Biztonság és adatvédelem
+•
+
+Az alkalmazás minden adatbázis-művelethez paraméterezett lekérdezéseket
+(prepared statements) alkalmazzon, ezzel megelőzve az SQL injection
+támadásokat. Ez garantálja, hogy az adatbázis nem értelmezi a bemenetet kódként
+vagy parancsként, hanem biztonságosan kezeli az értékeket.
+
+•
+
+Az összes kommunikáció titkosított legyen HTTPS protokollon keresztül,
+biztosítva az adatok védelmét a hálózaton áthaladva.
+
+2.4.2 Felhasználói élmény
+•
+
+Az alkalmazás felülete legyen egyszerű, átlátható, és reszponzív különböző
+eszközökön (mobil, tablet, desktop).
+
+•
+
+Az AI chatbot interakciók könnyen érthetőek és természetes nyelvűek legyenek.
+
+•
+
+Az alkalmazás támogatson több nyelvet vagy legalább a magyar és angol nyelvet.
+
+7
+
+2.5 Technológiai stack és architektúra
+Az alkalmazás egy háromrétegű (3-tier) architektúrában működik, amely
+világosan szétválasztja a különböző felelősségi köröket a fejlesztés során:
+Frontend: A felhasználói felület React keretrendszerrel készül, amely dinamikus,
+reszponzív és interaktív UI elemeket biztosít a chat és AI funkciók kezeléséhez.
+Backend: A szerveroldali logikát Java Spring keretrendszer valósítjuk meg. Ez felelős az
+üzleti logika végrehajtásáért, az AI API hívások kezeléséért, valamint az adatbázissal való
+kommunikációért.
+Adatbázis: A PostgreSQL adatbázis tárolja a szükséges információkat. Biztosítja az
+adatok tartósságát és megbízható lekérdezését.
+AI integráció: Valamilyen külső AI API-val valósul meg az AI chatbot és az AIasszisztált üzenetírás funkció. Ez lehet egy ismert mesterséges intelligencia szolgáltatás
+(például OpenAI, Google AI, Perplexity vagy más hasonló) amely REST API-n keresztül
+hívható a backendből.
+
+8
+
+

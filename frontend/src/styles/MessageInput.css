@@ -1,0 +1,79 @@
+.message-input-wrapper {
+  border-top: 1px solid #e0e0e0;
+  background: white;
+}
+
+.message-input-container {
+  padding: 15px;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.message-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 1em;
+  font-family: inherit;
+  resize: none;
+}
+
+.message-input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.input-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.ai-assist-button {
+  padding: 10px 20px;
+  background: #1565c0;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.ai-assist-button:hover {
+  background: #0d47a1;
+}
+
+.send-button {
+  padding: 10px 24px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.send-button:hover:not(:disabled) {
+  background: #5568d3;
+}
+
+.send-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .input-buttons {
+    flex-wrap: wrap;
+  }
+  
+  .ai-assist-button,
+  .send-button {
+    flex: 1;
+    min-width: 120px;
+  }
+}

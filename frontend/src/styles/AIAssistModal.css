@@ -1,0 +1,141 @@
+.ai-assist-modal {
+  max-width: 600px;
+  width: 95%;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: #667eea;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 2em;
+  color: #999;
+  cursor: pointer;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s;
+}
+
+.close-button:hover {
+  color: #333;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-section,
+.suggestion-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-section label,
+.suggestion-section label {
+  font-weight: bold;
+  color: #333;
+}
+
+.input-section textarea,
+.suggestion-section textarea {
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1em;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.input-section textarea:focus,
+.suggestion-section textarea:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.generate-button {
+  padding: 12px 24px;
+  background: #1565c0;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+  align-self: center;
+}
+
+.generate-button:hover:not(:disabled) {
+  background: #0d47a1;
+}
+
+.generate-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.accept-button,
+.reject-button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.accept-button {
+  background: #4caf50;
+  color: white;
+}
+
+.accept-button:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+}
+
+.reject-button {
+  background: #f44336;
+  color: white;
+}
+
+.reject-button:hover {
+  background: #da190b;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .modal-buttons {
+    flex-direction: column;
+  }
+  
+  .accept-button,
+  .reject-button {
+    width: 100%;
+  }
+}
