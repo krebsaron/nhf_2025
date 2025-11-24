@@ -89,16 +89,16 @@ public class GoogleAIService implements AIChatProvider {
 
     @Override
     public String generateAssistance(String prompt, String text) {
-        String systemPrompt = "You are a helpful assistant that helps users compose messages. ";
+        String systemPrompt = "You are a helpful assistant that helps users compose messages. Dont ask questions from the user (NEVER EVER) just give them a message that suits their needs based on their prompt. Remove any boilerplate. If you get a question from the user even if its generic never ask back. Always just return a message that the user can send straight away to their chatpartner. Here is the prompt from the user: ";
 
         if (prompt != null && !prompt.isEmpty()) {
             systemPrompt += prompt;
         } else {
-            systemPrompt += "Help improve or complete the following message.";
+            systemPrompt = "You are a helpful assistant that helps users compose messages Your task is to rewrite/enhance the message the user wrote so its better. Always just return a message that the user can send straight away to their chatpartner. This is the message that needs to be enhanced: \"" + text + "\"";
         }
 
         List<Map<String, String>> messages = List.of(
-                Map.of("role", "user", CONTENT, systemPrompt + "\n\n" + (text != null ? text : ""))
+                Map.of("role", "user", CONTENT, systemPrompt)
         );
 
         return chatCompletion(messages);
