@@ -129,6 +129,13 @@
   transform: translateY(-2px);
 }
 
+.loading-indicator {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-style: italic;
+}
+
 @media (max-width: 768px) {
   .modal-buttons {
     flex-direction: column;

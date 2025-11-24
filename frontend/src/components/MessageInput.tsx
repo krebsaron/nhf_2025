@@ -9,6 +9,7 @@ const MessageInput: React.FC = () => {
   const { sendMessage } = useChat();
   const [inputMessage, setInputMessage] = useState('');
   const [showAIModal, setShowAIModal] = useState(false);
+  const [aiMode, setAiMode] = useState<'enhance' | 'assist'>('assist');
 
   const handleSendMessage = () => {
     if (!inputMessage.trim()) return;
@@ -29,21 +30,38 @@ const MessageInput: React.FC = () => {
     setShowAIModal(false);
   };
 
+  const openAIModal = (mode: 'enhance' | 'assist') => {
+    setAiMode(mode);
+    setShowAIModal(true);
+  };
+
   return (
     <div className="message-input-wrapper">
       <div className="message-input-container">
-        <textarea
-          className="message-input"
-          value={inputMessage}
-          onChange={(e) => setInputMessage(e.target.value)}
-          onKeyPress={handleKeyPress}
-          placeholder={t('typeMessage')}
-          rows={2}
-        />
+        <div className="textarea-wrapper">
+          <textarea
+            className="message-input"
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
+            onKeyPress={handleKeyPress}
+            placeholder={t('typeMessage')}
+            rows={2}
+          />
+          <button
+            className="enhance-button"
+            onClick={() => openAIModal('enhance')}
+            title="Enhance message"
+            disabled={!inputMessage.trim()}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 4V2"/><path d="M15 16v-2"/><path d="M8 9h2"/><path d="M20 9h2"/><path d="M17.8 11.8 19 13"/><path d="M15 9h0"/><path d="M17.8 6.2 19 5"/><path d="M3 21l9-9"/><path d="M12.2 6.2 11 5"/>
+            </svg>
+          </button>
+        </div>
         <div className="input-buttons">
           <button
             className="ai-assist-button"
-            onClick={() => setShowAIModal(true)}
+            onClick={() => openAIModal('assist')}
             title={t('aiAssist')}
           >
             AI
@@ -63,6 +81,7 @@ const MessageInput: React.FC = () => {
           currentText={inputMessage}
           onAccept={handleAISuggestion}
           onClose={() => setShowAIModal(false)}
+          mode={aiMode}
         />
       )}
     </div>
