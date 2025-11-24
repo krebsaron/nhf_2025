@@ -10,6 +10,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
@@ -18,24 +19,21 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class OpenAIService implements AIChatProvider {
+public class GoogleAIService implements AIChatProvider {
 
     private static final String CONTENT = "content";
 
-    @Value("${openai.api.key}")
+    @Value("${google.ai.api.key:}")
     private String apiKey;
-    
-    @Value("${openai.api.url}")
+
+    @Value("${google.ai.api.url:}")
     private String apiUrl;
-    
-    @Value("${openai.model}")
-    private String model;
-    
-    @Value("${openai.timeout:10000}")
+
+    @Value("${google.ai.timeout:10000}")
     private int timeout;
-    
+
     private final ObjectMapper objectMapper = new ObjectMapper();
-    
+
     @Override
     public String chatCompletion(List<Map<String, String>> messages) {
         try {
@@ -43,58 +41,84 @@ public class OpenAIService implements AIChatProvider {
                     .setConnectTimeout(Duration.ofMillis(timeout))
                     .setReadTimeout(Duration.ofMillis(timeout))
                     .build();
-            
+
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.setBearerAuth(apiKey);
-            
+
             Map<String, Object> requestBody = new HashMap<>();
-            requestBody.put("model", model);
-            requestBody.put("messages", messages);
-            requestBody.put("max_tokens", 500);
-            requestBody.put("temperature", 0.7);
-            
+            requestBody.put("contents", convertMessagesToGoogleFormat(messages));
+            requestBody.put("generationConfig", Map.of(
+                    "maxOutputTokens", 500,
+                    "temperature", 0.7
+            ));
+
             HttpEntity<Map<String, Object>> request = new HttpEntity<>(requestBody, headers);
-            
+
+            URI uri = URI.create(apiUrl.trim() + "?key=" + apiKey.trim());
+            String jsonBodyString = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(requestBody);
+            log.info("Request Payload:\n{}", jsonBodyString);
             ResponseEntity<String> response = restTemplate.exchange(
-                    apiUrl,
+                    uri,
                     HttpMethod.POST,
                     request,
                     String.class
             );
-            
+
             if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
                 JsonNode jsonNode = objectMapper.readTree(response.getBody());
-                String content = jsonNode.path("choices").get(0)
-                        .path("message").path(CONTENT).asText();
+                if (jsonNode.path("candidates").isEmpty()) {
+                    log.warn("Google AI returned no candidates. Response: {}", response.getBody());
+                    return "No response generated.";
+                }
 
-                log.info("OpenAI API call successful");
+                String content = jsonNode.path("candidates").get(0)
+                        .path("content").path("parts").get(0)
+                        .path("text").asText();
+
+                log.info("Google AI API call successful");
                 return content;
             }
-            
-            throw new RuntimeException("OpenAI API returned non-OK status");
-            
+
+            throw new RuntimeException("Google AI API returned non-OK status");
+
         } catch (Exception e) {
-            log.error("Error calling OpenAI API", e);
+            log.error("Error calling Google AI API", e);
             return "Sorry, I'm having trouble responding right now. Please try again.";
         }
     }
-    
+
     @Override
     public String generateAssistance(String prompt, String text) {
         String systemPrompt = "You are a helpful assistant that helps users compose messages. ";
-        
+
         if (prompt != null && !prompt.isEmpty()) {
             systemPrompt += prompt;
         } else {
             systemPrompt += "Help improve or complete the following message.";
         }
-        
+
         List<Map<String, String>> messages = List.of(
-                Map.of("role", "system", CONTENT, systemPrompt),
-                Map.of("role", "user", CONTENT, text != null ? text : "")
+                Map.of("role", "user", CONTENT, systemPrompt + "\n\n" + (text != null ? text : ""))
         );
-        
+
         return chatCompletion(messages);
+    }
+
+    private List<Map<String, Object>> convertMessagesToGoogleFormat(List<Map<String, String>> messages) {
+        return messages.stream()
+                .map(msg -> {
+                    Map<String, Object> googleMsg = new HashMap<>();
+                    String role = msg.get("role");
+                    // Google AI uses "user" and "model" roles
+                    String googleRole = "system".equals(role) ? "user" : role;
+                    googleMsg.put("role", googleRole);
+
+                    Map<String, String> parts = new HashMap<>();
+                    parts.put("text", msg.get(CONTENT));
+                    googleMsg.put("parts", List.of(parts));
+
+                    return googleMsg;
+                })
+                .toList();
     }
 }
