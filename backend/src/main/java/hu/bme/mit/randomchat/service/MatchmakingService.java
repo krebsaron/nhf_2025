@@ -39,8 +39,32 @@ public class MatchmakingService {
         log.info("Session {} joined lobby", sessionId);
         sessionService.updateSessionStatus(sessionId, Session.SessionStatus.WAITING);
         
-        // Try to match immediately
-        tryMatch(sessionId);
+        // Add to queue first
+        waitingQueue.offer(sessionId);
+        log.info("Session {} added to queue. Queue size: {}", sessionId, waitingQueue.size());
+        
+        // Schedule matching attempt after a delay to allow WebSocket subscriptions
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000); // 1 second delay
+                tryMatchFromQueue();
+            } catch (InterruptedException e) {
+                log.error("Matching thread interrupted", e);
+            }
+        }).start();
+    }
+    
+    private void tryMatchFromQueue() {
+        // Try to create a match if we have at least 2 sessions waiting
+        if (waitingQueue.size() >= 2) {
+            UUID session1Id = waitingQueue.poll();
+            UUID session2Id = waitingQueue.poll();
+            
+            if (session1Id != null && session2Id != null) {
+                log.info("Attempting to match sessions: {} and {}", session1Id, session2Id);
+                createMatch(session1Id, session2Id);
+            }
+        }
     }
     
     private void tryMatch(UUID newSessionId) {

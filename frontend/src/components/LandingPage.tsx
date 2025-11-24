@@ -17,6 +17,9 @@ const LandingPage: React.FC = () => {
       const response = await sessionApi.createSession();
       setSessionId(response.sessionId);
       
+      // Wait a bit to ensure WebSocket connection is established
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
       await sessionApi.joinLobby(response.sessionId);
       
       navigate(`/lobby/${response.sessionId}`);
