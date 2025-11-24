@@ -14,7 +14,8 @@ interface ChatContextType {
   endChat: () => void;
   setSessionId: (id: string) => void;
   addAIMessage: (content: string) => void;
-}
+  addUserMessage: (content: string) => void;
+};
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
 
@@ -105,6 +106,17 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setMessages((prev) => [...prev, aiMessage]);
   };
 
+  const addUserMessage = (content: string) => {
+    const userMessage: Message = {
+      messageId: `user-${Date.now()}`,
+      fromSessionId: sessionId || 'unknown',
+      content,
+      timestamp: new Date().toISOString(),
+      isAI: false,
+    };
+    setMessages((prev) => [...prev, userMessage]);
+  };
+
   return (
     <ChatContext.Provider
       value={{
@@ -118,6 +130,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         endChat,
         setSessionId,
         addAIMessage,
+        addUserMessage,
       }}
     >
       {children}

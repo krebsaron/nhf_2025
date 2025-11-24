@@ -17,14 +17,20 @@ const MessageList: React.FC<MessageListProps> = ({ messages, currentSessionId })
   }, [messages]);
 
   const getSenderLabel = (message: Message) => {
-    if (message.isAI || message.fromSessionId === 'ai') {
+    if (message.isAI) {
+      return t('ai');
+    }
+    if (message.fromSessionId === 'ai') {
       return t('ai');
     }
     return message.fromSessionId === currentSessionId ? t('you') : t('partner');
   };
 
   const getMessageClass = (message: Message) => {
-    if (message.isAI || message.fromSessionId === 'ai') {
+    if (message.isAI) {
+      return 'message-bubble ai';
+    }
+    if (message.fromSessionId === 'ai') {
       return 'message-bubble ai';
     }
     return message.fromSessionId === currentSessionId 

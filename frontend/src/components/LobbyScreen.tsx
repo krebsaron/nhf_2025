@@ -9,12 +9,11 @@ import '../styles/LobbyScreen.css';
 const LobbyScreen: React.FC = () => {
   const { t } = useTranslation();
   const { sessionId } = useParams<{ sessionId: string }>();
-  const { messages, addAIMessage } = useChat();
+  const { messages, addAIMessage, addUserMessage } = useChat();
   const [inputMessage, setInputMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Add welcome message from AI
     const welcomeMsg = t('chatWithAI');
     addAIMessage(welcomeMsg);
   }, []);
@@ -25,8 +24,7 @@ const LobbyScreen: React.FC = () => {
     const userMessage = inputMessage;
     setInputMessage('');
 
-    // Add user message
-    addAIMessage(userMessage);
+    addUserMessage(userMessage);
 
     setLoading(true);
     try {
