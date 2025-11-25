@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: ${DB_USER:-postgres}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
     ports:
-      - "5432:5432"
+      - "0.0.0.0:5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -32,9 +32,9 @@ services:
       AI_PROVIDER: ${AI_PROVIDER}
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       GOOGLE_AI_API_KEY: ${GOOGLE_AI_API_KEY}
-      CORS_ORIGINS: https://localhost:8081,http://localhost:5173,http://localhost:8082
+      CORS_ORIGINS: https://localhost:8081,http://localhost:5173,http://localhost:8082,https://rchat.mm-home.eu
     ports:
-      - "8082:8082"
+      - "0.0.0.0:8082:8082"
     depends_on:
       db:
         condition: service_healthy
@@ -48,7 +48,7 @@ services:
       dockerfile: Dockerfile
     container_name: randomchat-frontend
     ports:
-      - "8081:8081"
+      - "0.0.0.0:8081:8081"
     volumes:
       - ./frontend/certs:/etc/nginx/certs:ro
     depends_on:
