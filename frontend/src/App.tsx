@@ -4,13 +4,12 @@ import { ChatProvider } from './context/ChatContext';
 import LandingPage from './components/LandingPage';
 import LobbyScreen from './components/LobbyScreen';
 import ChatWindow from './components/ChatWindow';
-import './App.css';
 
 const App: React.FC = () => {
   return (
     <BrowserRouter>
       <ChatProvider>
-        <div className="app">
+        <div className="w-full min-h-screen">
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/lobby/:sessionId" element={<LobbyScreen />} />
