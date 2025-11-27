@@ -1,4 +1,3 @@
-import React, { useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Message } from '../types';
 
@@ -9,17 +8,9 @@ interface MessageListProps {
 
 const MessageList: React.FC<MessageListProps> = ({ messages, currentSessionId }) => {
   const { t } = useTranslation();
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
 
   const getSenderLabel = (message: Message) => {
     if (message.isAI) {
-      return t('ai');
-    }
-    if (message.fromSessionId === 'ai') {
       return t('ai');
     }
     return message.fromSessionId === currentSessionId ? t('you') : t('partner');
@@ -28,7 +19,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, currentSessionId })
   const getMessageClasses = (message: Message) => {
     const baseClasses = "max-w-[85%] md:max-w-[70%] p-3 px-4 rounded-2xl break-words transition-all duration-300";
     
-    if (message.isAI || message.fromSessionId === 'ai') {
+    if (message.isAI) {
       return `${baseClasses} bg-[#e3f2fd] text-[#1565c0] rounded-bl-sm border-l-4 border-[#1565c0]`;
     }
     
@@ -55,7 +46,6 @@ const MessageList: React.FC<MessageListProps> = ({ messages, currentSessionId })
           </div>
         </div>
       ))}
-      <div ref={messagesEndRef} />
     </div>
   );
 };

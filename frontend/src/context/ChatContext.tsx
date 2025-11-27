@@ -41,7 +41,6 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const handleConnect = () => {
       setIsConnected(true);
 
-      // Subscribe to match notifications
       webSocketService.subscribe(`/queue/match/${sessionId}`, (message) => {
         const match: MatchResponse = JSON.parse(message.body);
         setRoomId(match.roomId);
@@ -51,13 +50,11 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         navigate(`/chat/${match.roomId}`);
       });
 
-      // Subscribe to chat messages
       webSocketService.subscribe(`/queue/messages/${sessionId}`, (message) => {
         const chatMessage: Message = JSON.parse(message.body);
         setMessages((prev) => [...prev, chatMessage]);
       });
 
-      // Subscribe to disconnect notifications
       webSocketService.subscribe(`/queue/disconnect/${sessionId}`, () => {
         setPartnerDisconnected(true);
       });

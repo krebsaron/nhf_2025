@@ -48,7 +48,7 @@ const AIAssistModal: React.FC<AIAssistModalProps> = ({ currentText, onAccept, on
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={onClose}>
       <div className="max-w-2xl w-[95%] bg-white p-8 rounded-2xl shadow-2xl text-left" onClick={(e) => e.stopPropagation()}>
         <div className="flex justify-between items-center mb-5 pb-4 border-b-2 border-gray-200">
-          <h3 className="m-0 text-[#667eea] text-xl font-bold">{mode === 'enhance' ? t('aiAssist') : t('aiAssist')}</h3>
+          <h3 className="m-0 text-[#667eea] text-xl font-bold">{t('aiAssist')}</h3>
           <button className="bg-transparent border-none text-3xl text-gray-400 cursor-pointer p-0 w-10 h-10 flex items-center justify-center transition-colors hover:text-gray-800" onClick={onClose}>×</button>
         </div>
 

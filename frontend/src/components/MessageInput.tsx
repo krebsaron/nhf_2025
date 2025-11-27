@@ -24,7 +24,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
 
   useEffect(() => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto'; 
+      textareaRef.current.style.height = 'auto';
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
   }, [inputMessage]);
@@ -52,7 +52,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
     }
   };
 
-  const handleAISuggestion = (suggestion: string) => {
+  const acceptAISuggestion = (suggestion: string) => {
     setInputMessage(suggestion);
     setShowAIModal(false);
   };
@@ -128,7 +128,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
       {showAIModal && (
         <AIAssistModal
           currentText={inputMessage}
-          onAccept={handleAISuggestion}
+          onAccept={acceptAISuggestion}
           onClose={() => setShowAIModal(false)}
           mode={aiMode}
         />
